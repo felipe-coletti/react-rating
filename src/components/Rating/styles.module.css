@@ -4,6 +4,10 @@
     gap: 0.25rem;
 }
 
+.input {
+    display: none;
+}
+
 .filledStar {
     color: var(--star-color);
 }

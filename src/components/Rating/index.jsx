@@ -8,42 +8,58 @@ const Rating = ({ value = 0, readOnly = false, onChange }) => {
     
     const [displayRating, setDisplayRating] = useState(rating.current)
 
-    const swicthValue = (i) => {
-        if (rating.current === i + 1) {
-            rating.current = 0
-        } else {
-            rating.current = i + 1
+    const handleEnter = (newDisplayRating) => {
+        if (!readOnly) {
+            if (!alredyIn.current) {
+                setDisplayRating(newDisplayRating)
+                alredyIn.current = true
+            }
         }
+    }
 
-        setDisplayRating(rating.current)
-        
-        onChange && onChange(rating.current)
+    const handleLeave = () => {
+        if (!readOnly) {
+            if (alredyIn.current) {
+                alredyIn.current = false
+            }
+        }
+    }
+
+    const swicthRating = (newRating) => {
+        if (!readOnly) {
+            if (rating.current === newRating) {
+                rating.current = 0
+            } else {
+                rating.current = newRating
+            }
+
+            setDisplayRating(rating.current)
+            onChange && onChange(rating.current)
+        }
     }
 
     var ratingStars = []
 
     for (let i = 0; i < 5; i++) {
-        let style
-        let icon
-
-        if (i < displayRating) {
-            style = styles.filledStar
-            icon = <Icon icon="ion:star" />
-        } else {
-            style = styles.unfilledStar
-            icon = <Icon icon="ion:star-outline" />
-        }
-
         ratingStars.push(
-            !readOnly ? (
-                <button className={style} style={{cursor: 'pointer'}} onClick={() => swicthValue(i)} onMouseEnter={() => {!alredyIn.current && setDisplayRating(i + 1), alredyIn.current=true}} onMouseLeave={() => alredyIn.current = false} title='star' key={i}>
-                    {icon}
-                </button>
-            ) : (
-                <button className={style} title='star' key={i}>
-                    {icon}
-                </button>
-            )
+            <label onMouseEnter={() => handleEnter(i + 1)} onMouseLeave={handleLeave} key={i}>
+                <input
+                    className={styles.input}
+                    type='radio'
+                    checked={i < displayRating}
+                    onClick={() => swicthRating(i + 1)}
+                    readOnly
+                />
+                {i < displayRating ? (
+                    <span className={styles.filledStar}>
+                        <Icon icon="ion:star" />
+                    </span>
+                ) : (
+                    <span className={styles.unfilledStar}>
+                        <Icon icon="ion:star-outline" />
+                    </span>
+                )}
+            </label>
         )
     }
 
