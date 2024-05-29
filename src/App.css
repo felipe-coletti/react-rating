@@ -1,0 +1,18 @@
+.container {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 1.5rem;
+}
+
+.content-area {
+    align-items: center;
+    display: flex;
+    gap: 0.75rem;
+}
+
+.paragraph {
+    color: var(--secondary-text-color);
+    font-size: 0.875rem;
+}
