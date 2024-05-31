@@ -12,19 +12,15 @@
     color: var(--star-color);
 }
 
-.disabledFilledStar {
-    color: var(--disabled-star-color);
-}
-
 .unfilledStar {
     color: var(--border-color);
 }
 
-.disabledUnfilledStar {
-    color: var(--disabled-border-color);
+.disabled {
+    opacity: 0.3;
 }
 
-.filledStar, .disabledFilledStar, .unfilledStar, .disabledUnfilledStar {
+.filledStar, .unfilledStar {
     background-color: transparent;
     border: none;
     display: flex;
