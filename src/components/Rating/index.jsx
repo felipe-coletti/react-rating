@@ -2,14 +2,16 @@ import { useState, useRef } from 'react'
 import styles from './styles.module.css'
 import { Icon } from '@iconify/react'
 
-const Rating = ({ value, readOnly = false, onChange }) => {
+const Rating = ({ value, onChange, readOnly = false, disabled = false }) => {
     const rating = useRef(0)
     const alredyIn = useRef(false)
     
     const [displayRating, setDisplayRating] = useState(value != null ? value : rating.current)
 
+    const active = !readOnly && !disabled
+
     const handleEnter = (newDisplayRating) => {
-        if (!readOnly) {
+        if (active) {
             if (!alredyIn.current) {
                 setDisplayRating(newDisplayRating)
                 alredyIn.current = true
@@ -18,7 +20,7 @@ const Rating = ({ value, readOnly = false, onChange }) => {
     }
 
     const handleLeave = () => {
-        if (!readOnly) {
+        if (active) {
             if (alredyIn.current) {
                 alredyIn.current = false
             }
@@ -26,7 +28,7 @@ const Rating = ({ value, readOnly = false, onChange }) => {
     }
 
     const swicthRating = (newRating) => {
-        if (!readOnly) {
+        if (active) {
             if (value === null) {
                 if (rating.current === newRating) {
                     rating.current = 0
@@ -60,13 +62,14 @@ const Rating = ({ value, readOnly = false, onChange }) => {
                     checked={i < displayRating}
                     onClick={() => swicthRating(i + 1)}
                     readOnly
+                    disabled={disabled}
                 />
                 {i < displayRating ? (
-                    <span className={styles.filledStar} style={!readOnly && {cursor: 'pointer'}}>
+                    <span className={!disabled ? styles.filledStar : styles.disabledFilledStar} style={active ? {cursor: 'pointer'} : null}>
                         <Icon icon="ion:star" />
                     </span>
                 ) : (
-                    <span className={styles.unfilledStar} style={!readOnly && {cursor: 'pointer'}}>
+                    <span className={!disabled ? styles.unfilledStar : styles.disabledUnfilledStar} style={active ? {cursor: 'pointer'} : null}>
                         <Icon icon="ion:star-outline" />
                     </span>
                 )}
@@ -75,7 +78,7 @@ const Rating = ({ value, readOnly = false, onChange }) => {
     }
 
     return (
-        <div className={styles.container} onMouseLeave={() => !readOnly && setDisplayRating(value != null ? value : rating.current)}>
+        <div className={styles.container} onMouseLeave={() => active && setDisplayRating(value != null ? value : rating.current)}>
             {ratingStars}
         </div>
     )
