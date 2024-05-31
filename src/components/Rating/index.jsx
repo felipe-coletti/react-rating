@@ -65,11 +65,11 @@ const Rating = ({ value, onChange, readOnly = false, disabled = false }) => {
                     disabled={disabled}
                 />
                 {i < displayRating ? (
-                    <span className={styles.filledStar + (disabled && " " + styles.disabled)} style={active ? {cursor: 'pointer'} : null}>
+                    <span className={styles.filledStar + " " + (disabled && styles.disabled)} style={active ? {cursor: 'pointer'} : null}>
                         <Icon icon="ion:star" />
                     </span>
                 ) : (
-                    <span className={styles.unfilledStar + (disabled && " " + styles.disabled)} style={active ? {cursor: 'pointer'} : null}>
+                    <span className={styles.unfilledStar + " " + (disabled && styles.disabled)} style={active ? {cursor: 'pointer'} : null}>
                         <Icon icon="ion:star-outline" />
                     </span>
                 )}
