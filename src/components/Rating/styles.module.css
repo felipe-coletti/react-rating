@@ -1,5 +1,4 @@
 .container {
-    align-items: center;
     display: flex;
     gap: 0.25rem;
 }
@@ -21,8 +20,6 @@
 }
 
 .filledStar, .unfilledStar {
-    background-color: transparent;
-    border: none;
     display: flex;
     font-size: 1.25rem;
 }
