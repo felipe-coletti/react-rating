@@ -1,12 +1,9 @@
 :root {
     --primary-text-color: #000;
     --secondary-text-color: #585858;
-    --highlight-color: #0072e3;
     --star-color: #ffb703;
     --border-color: #ccc;
-    --backdrop-color: #00000040;
-    --primary-background-color: #fff;
-    --secondary-background-color: #f5f5f5;
+    --background-color: #fff;
 }
 
 * {
@@ -14,4 +11,8 @@
     padding: 0;
     box-sizing: border-box;
     font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    background-color: var(--background-color);
 }
