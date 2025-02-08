@@ -1,53 +1,38 @@
-import { useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import styles from './styles.module.css'
 import { Icon } from '@iconify/react'
 
 const Rating = ({ value, onChange, readOnly = false, disabled = false }) => {
-    const rating = useRef(0)
-    const alredyIn = useRef(false)
-    
-    const [displayRating, setDisplayRating] = useState(value != null ? value : rating.current)
+    const [rating, setRating] = useState(value != null ? value : 0)
+    const [displayRating, setDisplayRating] = useState(rating)
 
     const active = !readOnly && !disabled
 
-    const handleEnter = (newDisplayRating) => {
-        if (active) {
-            if (!alredyIn.current) {
-                setDisplayRating(newDisplayRating)
-                alredyIn.current = true
-            }
+    useEffect(() => {
+        if (value != null) {
+            setRating(value)
+            setDisplayRating(value)
         }
+    }, [value])
+
+    const handleEnter = (newDisplayRating) => {
+        setDisplayRating(newDisplayRating)
     }
 
     const handleLeave = () => {
-        if (active) {
-            if (alredyIn.current) {
-                alredyIn.current = false
-            }
-        }
+        setDisplayRating(rating)
     }
 
     const swicthRating = (newRating) => {
-        if (active) {
-            if (value === null) {
-                if (rating.current === newRating) {
-                    rating.current = 0
-                } else {
-                    rating.current = newRating
-                }
+        const newValue = rating === newRating ? 0 : newRating
 
-                setDisplayRating(rating.current)
-                onChange && onChange(rating.current)
-            } else {
-                if (onChange) {
-                    if (newRating === value) {
-                        newRating = 0
-                    }
-                    
-                    setDisplayRating(newRating)
-                    onChange(newRating)
-                }
-            }
+        if (value === null) {
+            setRating(newValue)
+            setDisplayRating(newValue)
+        }
+
+        if (onChange) {
+            onChange(newValue)
         }
     }
 
@@ -55,21 +40,27 @@ const Rating = ({ value, onChange, readOnly = false, disabled = false }) => {
 
     for (let i = 0; i < 5; i++) {
         ratingStars.push(
-            <label onMouseEnter={() => handleEnter(i + 1)} onMouseLeave={handleLeave} key={i}>
+            <label onMouseEnter={active && (() => handleEnter(i + 1))} onMouseLeave={active && handleLeave} key={i}>
                 <input
                     className={styles.input}
                     type='radio'
                     checked={i < displayRating}
-                    onClick={() => swicthRating(i + 1)}
+                    onClick={active && (() => swicthRating(i + 1))}
                     readOnly
                     disabled={disabled}
                 />
                 {i < displayRating ? (
-                    <span className={styles.filledStar + (disabled ? " " + styles.disabled : "")} style={active ? {cursor: 'pointer'} : null}>
+                    <span
+                        className={styles.filledStar + (disabled ? " " + styles.disabled : "")}
+                        style={active ? {cursor: 'pointer'} : null}
+                    >
                         <Icon icon="ion:star" />
                     </span>
                 ) : (
-                    <span className={styles.unfilledStar + (disabled ? " " + styles.disabled : "")} style={active ? {cursor: 'pointer'} : null}>
+                    <span
+                        className={styles.unfilledStar + (disabled ? " " + styles.disabled : "")}
+                        style={active ? {cursor: 'pointer'} : null}
+                    >
                         <Icon icon="ion:star-outline" />
                     </span>
                 )}
@@ -78,7 +69,10 @@ const Rating = ({ value, onChange, readOnly = false, disabled = false }) => {
     }
 
     return (
-        <div className={styles.container} onMouseLeave={() => active && setDisplayRating(value != null ? value : rating.current)}>
+        <div
+            className={styles.container}
+            onMouseLeave={active && handleLeave}
+        >
             {ratingStars}
         </div>
     )
